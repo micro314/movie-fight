@@ -46,6 +46,7 @@ createAutoComplete({
 });
 
 const onMovieSelect = async movie => {
+    document.querySelector('.tutorial').classList.add('is-hidden');
     const response = await axios.get(omdbData.url, {
         params: {
             apikey: omdbData.apikey,
