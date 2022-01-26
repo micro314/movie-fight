@@ -3,7 +3,7 @@ const omdbData = {
     apikey: '20b79249'
 }
 
-const fetchData = async (searchTerm) => {
+const fetchDataFromOmdb = async (searchTerm) => {
     const response = await axios.get(omdbData.url, {
         params: {
             apikey: omdbData.apikey,
@@ -31,6 +31,9 @@ createAutoComplete({
     },
     inputValue(movie) {
         return movie.Title;
+    },
+    async fetchData(searchTerm) {
+        return await fetchDataFromOmdb(searchTerm);
     }
 });
 
