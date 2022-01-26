@@ -40,7 +40,6 @@ const hideDropdown = () => {
     dropdown.classList.remove('is-active');
 }
 
-
 const onInput = async event => {
     const movies = await fetchData(event.target.value);
     if (!movies.length) {
@@ -82,5 +81,24 @@ const onMovieSelect = async movie => {
         }
     })
 
-    console.log(response.data);
+    document.querySelector('#summary').innerHTML = movieTemplate(response.data);
+}
+
+const movieTemplate = (movieDetail) => {
+    return `
+        <article class="media">
+            <figure class="media-left">
+                <p class="image">
+                    <img src="${movieDetail.Poster}" />
+                </p>
+            </figure>
+            <div class="media-content">
+                <div class="content">
+                    <h1>${movieDetail.Title}</h1>
+                    <h4>${movieDetail.Genre}</h4>
+                    <p>${movieDetail.Plot}</p>
+                </div>
+            </div>
+        </article>
+    `;
 }
