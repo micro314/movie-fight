@@ -1,7 +1,12 @@
+const omdbData = {
+    url: 'http://www.omdbapi.com/',
+    apikey: '20b79249'
+}
+
 const fetchData = async (searchTerm) => {
-    const response = await axios.get('http://www.omdbapi.com/', {
+    const response = await axios.get(omdbData.url, {
         params: {
-            apikey: '20b79249',
+            apikey: omdbData.apikey,
             s: searchTerm
         }
     });
@@ -28,24 +33,36 @@ const input = document.querySelector('.input');
 const dropdown = document.querySelector('.dropdown');
 const resultsWrapper = document.querySelector('.results');
 
+const showDropdown = () => {
+    dropdown.classList.add('is-active');
+}
+const hideDropdown = () => {
+    dropdown.classList.remove('is-active');
+}
+
+
 const onInput = async event => {
     const movies = await fetchData(event.target.value);
     if (!movies.length) {
-        dropdown.classList.remove('is-active');
+        hideDropdown();
         return;
     }
-    
+
     resultsWrapper.innerHTML = '';
-    dropdown.classList.add('is-active');
+    showDropdown();
     for (let movie of movies) {
         const option = document.createElement('a');
-
         option.classList.add('dropdown-item');
         const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
         option.innerHTML = `
             <img src="${imgSrc}" />
             ${movie.Title}
         `;
+        option.addEventListener('click', () => {
+            hideDropdown();
+            input.value = movie.Title;
+            onMovieSelect(movie);
+        });
         resultsWrapper.appendChild(option);
     }
 }
@@ -53,6 +70,17 @@ const onInput = async event => {
 input.addEventListener('input', debounce(onInput, 500));
 document.addEventListener('click', event => {
     if (!root.contains(event.target)) {
-        dropdown.classList.remove('is-active');
+        hideDropdown();
     }
 });
+
+const onMovieSelect = async movie => {
+    const response = await axios.get(omdbData.url, {
+        params: {
+            apikey: omdbData.apikey,
+            i: movie.imdbID
+        }
+    })
+
+    console.log(response.data);
+}
