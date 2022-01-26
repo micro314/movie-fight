@@ -1,4 +1,4 @@
-const createAutoComplete = ({ root }) => {
+const createAutoComplete = ({ root, renderOption }) => {
     root.innerHTML = `
     <label><b>Search for a Movie</b></label>
     <input class="input" />
@@ -33,11 +33,7 @@ const createAutoComplete = ({ root }) => {
         for (let movie of movies) {
             const option = document.createElement('a');
             option.classList.add('dropdown-item');
-            const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
-            option.innerHTML = `
-            <img src="${imgSrc}" />
-            ${movie.Title}
-        `;
+            option.innerHTML = renderOption(movie);
             option.addEventListener('click', () => {
                 hideDropdown();
                 input.value = movie.Title;
