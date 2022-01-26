@@ -6,12 +6,13 @@ const fetchData = async (searchTerm) => {
         }
     });
 
-    console.log(response.data);
+    return response.data.Search;
 }
 
-const onInput = event => {
+const onInput = async event => {
     if (event.target.value) {
-        fetchData(event.target.value);
+        const movies = await fetchData(event.target.value);
+        console.log(movies);
     }
 }
 
